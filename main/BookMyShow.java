@@ -7,6 +7,8 @@ import models.theatre.Screen;
 import models.theatre.Seat;
 import models.theatre.Show;
 import models.theatre.Theatre;
+import services.ShowService;
+import services.TheatreService;
 
 import java.time.LocalDateTime;
 
@@ -15,33 +17,46 @@ public class BookMyShow {
     public static void main(String[] args) {
         System.out.println("Welcome to BookMyShow! Application started successfully.");
 
-        // Test Step 3: Create and print Theatre, Screen, Seat, Show
-        // Create a Movie
+        // TESTING : TheatreService and ShowService
+        // Creating services
+        TheatreService theatreService = new TheatreService();
+        ShowService showService = new ShowService();
+
+        // Creating a Movie
         Movie movie = new Movie(1, "Joker", 132);
 
-        // Create a Theatre
-        Theatre theatre = new Theatre(1, "PVR Cinemas", City.Kalyani);
+        // Creating Theatres
+        Theatre theatre1 = new Theatre(1, "PVR Cinemas", City.Kalyani);
+        Theatre theatre2 = new Theatre(2, "INOX", City.Kolkata);
+        theatreService.addTheatre(theatre1);
+        theatreService.addTheatre(theatre2);
 
-        // Create a Screen
+        // Creating a Screen for theatre1
         Screen screen = new Screen(1, "Screen 1");
-        theatre.addScreen(screen);
+        theatre1.addScreen(screen);
 
-        // Create Seats
+        // Creating Seats for the screen
         Seat seat1 = new Seat(1, 1, 1, SeatCategory.Platinum);
         Seat seat2 = new Seat(2, 1, 2, SeatCategory.Gold);
         screen.addSeat(seat1);
         screen.addSeat(seat2);
 
-        // Create a Show
+        // Creating a Show
         Show show = new Show(1, movie, screen, LocalDateTime.now(), movie.getMovieDuration());
+        showService.addShow(theatre1, screen, show);
 
-        // Print details
-        System.out.println("Theatre: " + theatre.getTheatreName() + ", City: " + theatre.getCity());
-        System.out.println("Screen: " + screen.getScreenName() + ", Seats: " + screen.getSeats().size());
-        System.out.println("Seat 1: Row " + seat1.getRowNumber() + ", Number " + seat1.getSeatNumber() + 
-                           ", Category: " + seat1.getCategory() + ", Price: " + seat1.getCategory().getPrice());
-        System.out.println("Show: Movie " + show.getMovie().getMovieName() + 
-                           ", Start Time: " + show.getStartTime() + 
-                           ", Duration: " + show.getDurationInMinutes() + " minutes");
+        // Testing TheatreService: Get theatres in Kalyani
+        System.out.println("Theatres in Kalyani:");
+        for (Theatre theatre : theatreService.getTheatresByCity(City.Kalyani)) {
+            System.out.println("- " + theatre.getTheatreName() + ", Screens: " + 
+                               theatre.getScreens().size());
+        }
+
+        // Testing TheatreService: Get all theatres
+        System.out.println("All Theatres:");
+        for (Theatre theatre : theatreService.getAllTheatres()) {
+            System.out.println("- " + theatre.getTheatreName() + ", City: " + 
+                               theatre.getCity());
+        }
     }
 }
