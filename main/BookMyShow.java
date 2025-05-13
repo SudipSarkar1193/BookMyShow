@@ -6,8 +6,8 @@ import enums.BookingStatus;
 import java.util.Arrays;
 import java.util.List;
 
-public class Main {
-    public static void BookMyShow (String[] args) {
+public class BookMyShow {
+    public static void main (String[] args) {
         // Creating sample Show object
         Show show = new Show(1, "Avengers: Endgame", "2025-05-15 19:00");
 
